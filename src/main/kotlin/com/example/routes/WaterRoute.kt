@@ -46,6 +46,10 @@ fun Route.waterRoute(
         }
     }
 
+    get("api/test"){
+        call.respondText { "Success" }
+    }
+
     get("api/water/get"){
         val userId = call.userId()
 
