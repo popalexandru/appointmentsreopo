@@ -18,7 +18,6 @@ import io.ktor.routing.*
 fun Route.defaultRoute(
     repository: TestRepository
 ){
-
         post("/user/create"){
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run{
                 call.respond(HttpStatusCode.BadRequest)
