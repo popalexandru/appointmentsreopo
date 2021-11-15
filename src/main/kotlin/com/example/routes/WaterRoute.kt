@@ -1,7 +1,9 @@
 package com.example.routes
 
 import com.example.data.requests.AddWaterReq
+import com.example.domain.repository.TestRepository
 import com.example.domain.repository.WorkoutDayRepository
+import com.example.domain.repository.WorkoutRepository
 import com.example.domain.service.WaterService
 import com.example.util.isValid
 import com.example.util.userId
@@ -12,9 +14,13 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-fun Route.defaultRoute(){
+fun Route.defaultRoute(
+    repository: TestRepository
+){
     get("/api/test"){
         call.respondText { "Paul fac io servere pt 3500" }
+
+        repository.addSmth()
     }
 }
 

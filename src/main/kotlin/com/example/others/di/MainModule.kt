@@ -11,8 +11,12 @@ import org.litote.kmongo.reactivestreams.KMongo
 
 val mainModule = module {
     single {
-        val client = KMongo.createClient().coroutine
+        val client = KMongo.createClient("mongodb+srv://sutzu:alumil@cluster0.jjuyk.mongodb.net/"+Constants.DB_NAME+"?retryWrites=true&w=majority").coroutine
         client.getDatabase(Constants.DB_NAME)
+    }
+
+    single{
+        TestRepository(get())
     }
 
     single{
