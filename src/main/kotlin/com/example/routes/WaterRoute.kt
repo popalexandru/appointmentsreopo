@@ -48,6 +48,8 @@ fun Route.waterRoute(
 
     get("api/test"){
         call.respondText { "Success" }
+
+        waterService.addWater("123", 30, System.currentTimeMillis())
     }
 
     get("api/water/get"){
