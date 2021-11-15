@@ -18,6 +18,24 @@ import io.ktor.routing.*
 fun Route.defaultRoute(
     repository: TestRepository
 ){
+        get("user/get"){
+            val username = call.parameters["username"] ?: ""
+
+            val password = repository.getPassword(username)
+
+            if(password != null){
+                call.respond(
+                    HttpStatusCode.OK,
+                    "Parola gasita: $password"
+                )
+            }else{
+                call.respond(
+                    HttpStatusCode.NotFound,
+                    "Nu am gasit userul"
+                )
+            }
+        }
+
         post("/user/create"){
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run{
                 call.respond(HttpStatusCode.BadRequest)
@@ -34,6 +52,11 @@ fun Route.defaultRoute(
                 return@post
             }
 
+            repository.createAccount(
+                request.username,
+                request.password,
+                request.email
+            )
             call.respondText { "OKE" }
         }
 }
