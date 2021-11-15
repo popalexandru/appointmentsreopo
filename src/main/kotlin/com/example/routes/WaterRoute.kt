@@ -12,6 +12,12 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
+fun Route.defaultRoute(){
+    get("/"){
+        call.respondText { "Paul fac io servere pt 3500" }
+    }
+}
+
 fun Route.waterRoute(
     waterService: WaterService
 ){

@@ -16,6 +16,7 @@ fun Application.configureRouting() {
     val exerciceService: ExerciceService by inject()
 
     routing {
+        defaultRoute()
         waterRoute(waterService)
         workoutRoute(workoutService, userService)
         loginUser(userService)
