@@ -13,7 +13,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Route.defaultRoute(){
-    get("/"){
+    get("/api/test"){
         call.respondText { "Paul fac io servere pt 3500" }
     }
 }
