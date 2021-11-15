@@ -24,7 +24,7 @@ fun Route.defaultRoute(
                 return@post
             }
 
-            if(request.email.isNotBlank() || request.username.isNotBlank() || request.password.isNotBlank())
+            if(request.email.isBlank() || request.username.isBlank() || request.password.isBlank())
             {
                 call.respond(
                     HttpStatusCode.BadRequest,
@@ -33,6 +33,8 @@ fun Route.defaultRoute(
 
                 return@post
             }
+
+            call.respondText { "OKE" }
         }
 }
 
