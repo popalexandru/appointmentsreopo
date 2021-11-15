@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.data.requests.AddWaterReq
+import com.example.data.requests.CreateAccountRequest
 import com.example.domain.repository.TestRepository
 import com.example.domain.repository.WorkoutDayRepository
 import com.example.domain.repository.WorkoutRepository
@@ -17,11 +18,25 @@ import io.ktor.routing.*
 fun Route.defaultRoute(
     repository: TestRepository
 ){
-    get("/api/test"){
-        call.respondText { "Paul fac io servere pt 3500" }
+    route("/user/create"){
+        post{
+            val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run{
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
 
-        repository.addSmth()
+            if(request.email.isNotBlank() || request.username.isNotBlank() || request.password.isNotBlank())
+            {
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Campurile nu pot fii goale"
+                )
+
+                return@post
+            }
+        }
     }
+
 }
 
 fun Route.waterRoute(
