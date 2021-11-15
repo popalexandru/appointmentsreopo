@@ -18,8 +18,8 @@ import io.ktor.routing.*
 fun Route.defaultRoute(
     repository: TestRepository
 ){
-    route("/user/create"){
-        post{
+
+        post("/user/create"){
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run{
                 call.respond(HttpStatusCode.BadRequest)
                 return@post
@@ -35,8 +35,6 @@ fun Route.defaultRoute(
                 return@post
             }
         }
-    }
-
 }
 
 fun Route.waterRoute(
