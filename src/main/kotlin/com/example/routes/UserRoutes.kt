@@ -43,15 +43,20 @@ fun Route.createUserRoute(
                 return@post
             }
 
-            loginService.createAccount(
+            val result = loginService.createAccount(
                 CreateAccountRequest(
                     email = request.email,
                     password = request.password
                 )
             )
-            call.respond(
-                HttpStatusCode.OK
-            )
+
+            if(result.wasAcknowledged()){
+                call.respondText { "Response not acknowledged" }
+            }else{
+                call.respond(
+                    HttpStatusCode.OK
+                )
+            }
         }
     }
 }

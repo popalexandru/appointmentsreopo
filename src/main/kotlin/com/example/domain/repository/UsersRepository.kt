@@ -3,6 +3,7 @@ package com.example.domain.repository
 import com.example.data.models.TestDto
 import com.example.data.models.User
 import com.example.data.requests.CreateAccountRequest
+import com.mongodb.client.result.InsertOneResult
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
@@ -14,8 +15,8 @@ class UsersRepository(
 
     suspend fun createAccount(
         user: User
-    ){
-        users.insertOne(user)
+    ): InsertOneResult {
+        return users.insertOne(user)
     }
 
     suspend fun getUserByEmail(
