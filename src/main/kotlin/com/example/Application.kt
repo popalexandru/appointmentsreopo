@@ -3,6 +3,8 @@ package com.example
 import com.example.others.di.mainModule
 import io.ktor.application.*
 import com.example.plugins.*
+import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -27,6 +29,18 @@ fun main(args: Array<String>): Unit =
 fun Application.module() {
     install(Koin){
         modules(mainModule)
+    }
+
+    install(CORS){
+            method(HttpMethod.Options)
+            method(HttpMethod.Get)
+            method(HttpMethod.Post)
+            method(HttpMethod.Put)
+            method(HttpMethod.Delete)
+            method(HttpMethod.Patch)
+            header(HttpHeaders.AccessControlAllowHeaders)
+            header(HttpHeaders.ContentType)
+            header(HttpHeaders.AccessControlAllowOrigin)
     }
 
     configureRouting()
