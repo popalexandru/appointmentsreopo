@@ -97,15 +97,12 @@ fun Route.loginUser(
                 /*AuthResponse(token = token, successful = true)*/
             )
         }else{
-            val userExists = loginService.loginUser(
-                request.email,
-                request.password
-            )
+            val userExists = loginService.getUserByEmail(request.email) != null
 
             if(userExists){
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    "Credentiale incorecte"
+                    "Parola incorecta"
                     /*AuthResponse(successful = false)*/
                 )
             }
