@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.domain.repository.ReservationRepository
 import com.example.domain.repository.UsersRepository
 import com.example.domain.service.*
 import com.example.routes.*
@@ -8,24 +9,22 @@ import io.ktor.application.*
 import org.koin.ktor.ext.inject
 
 fun Application.configureRouting() {
-    val waterService : WaterService by inject()
-    val workoutService : WorkoutService by inject()
+    val jwtIssuer = environment.config.property("jwt.domain").getString()
+    val jwtAudience = environment.config.property("jwt.audience").getString()
+    val jwtSecret= environment.config.property("jwt.secret").getString()
+
     val userService: UserService by inject()
-    val repetitionService: RepetitionService by inject()
-    val exampleService: ExampleService by inject()
-    val exerciceService: ExerciceService by inject()
-    val testRepo : UsersRepository by inject()
+    val usersRepository: UsersRepository by inject()
+    val reservationRepository: ReservationRepository by inject()
 
     routing {
-        waterRoute(waterService)
-        workoutRoute(workoutService, userService)
-
-
-        loginUser(userService)
+        loginUser(
+            userService,
+            jwtIssuer, jwtAudience, jwtSecret
+        )
         createUserRoute(userService)
-
         testRoute()
-
+        makeReservation(usersRepository, reservationRepository)
 
 /*        workoutDayRoute(
             userService,
@@ -35,5 +34,7 @@ fun Application.configureRouting() {
             exampleService,
             exerciceService
         )*/
+        /*        waterRoute(waterService)
+        workoutRoute(workoutService, userService)*/
     }
 }

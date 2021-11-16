@@ -3,6 +3,7 @@ package com.example
 import com.example.others.di.mainModule
 import io.ktor.application.*
 import com.example.plugins.*
+import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.response.*
@@ -46,9 +47,10 @@ fun Application.module() {
         allowCredentials = true
     }
 
-    configureRouting()
+
     configureSerialization()
     configureMonitoring()
     configureHTTP()
     configureSecurity()
+    configureRouting()
 }

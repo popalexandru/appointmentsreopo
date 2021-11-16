@@ -25,6 +25,12 @@ class UsersRepository(
         return users.findOne(User::email eq userEmail)
     }
 
+    suspend fun getUserById(
+        userId: String
+    ): User?{
+        return users.findOneById(userId)
+    }
+
     suspend fun doesPasswordForUserMatch(
         userEmail: String,
         userPassword: String

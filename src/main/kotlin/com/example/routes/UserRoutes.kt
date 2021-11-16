@@ -62,10 +62,10 @@ fun Route.createUserRoute(
 }
 
 fun Route.loginUser(
-    loginService: UserService/*,
+    loginService: UserService,
     jwtIssuer: String,
     jwtAudience: String,
-    jwtSecret: String*/
+    jwtSecret: String
 ){
     post("/api/user/login"){
         val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
@@ -88,17 +88,17 @@ fun Route.loginUser(
 
         if(isCorrectPassword){
             val expiresIn = 1000L * 60L * 60L * 24L * 365L
-/*            val token = JWT.create()
+            val token = JWT.create()
                 .withClaim("email", request.email)
                 .withIssuer(jwtIssuer)
                 .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
                 .withAudience(jwtAudience)
-                .sign(Algorithm.HMAC256(jwtSecret))*/
+                .sign(Algorithm.HMAC256(jwtSecret))
 
 
             call.respond(
                 HttpStatusCode.OK,
-                "Logat"
+                token
             )
         }else{
             val userExists = loginService.getUserByEmail(request.email) != null
@@ -107,18 +107,14 @@ fun Route.loginUser(
                 call.respond(
                     HttpStatusCode.BadRequest,
                     "Parola incorecta"
-                    /*AuthResponse(successful = false)*/
                 )
             }
             else{
                 call.respond(
                     HttpStatusCode.BadRequest,
                     "Utilizatorul nu exista"
-                    /*AuthResponse(successful = false)*/
                 )
             }
-
-
         }
     }
 }

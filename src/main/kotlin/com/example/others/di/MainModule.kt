@@ -16,6 +16,10 @@ val mainModule = module {
     }
 
     single{
+        ReservationRepository(get())
+    }
+
+    single{
         UsersRepository(get())
     }
 
