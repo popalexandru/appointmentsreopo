@@ -19,7 +19,7 @@ fun Route.workoutRoute(
     get("api/workout/get"){
         val userId = call.userId()
 
-        val userIdExists = userService.getUserById(userId) != null
+        val userIdExists = false
 
         if(userIdExists){
             val workout = workoutService.getWorkout(

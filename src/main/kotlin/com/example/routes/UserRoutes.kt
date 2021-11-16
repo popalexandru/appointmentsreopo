@@ -19,7 +19,6 @@ fun Route.createUserRoute(
     loginService: UserService
 ){
     route("/api/user/create"){
-
         post {
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest)
@@ -28,37 +27,30 @@ fun Route.createUserRoute(
 
             val userExist = loginService.getUserByEmail(request.email) != null
 
-            if(request.email.isBlank() || request.password.isBlank() || request.username.isBlank()){
+            if(request.email.isBlank() || request.password.isBlank()){
                 call.respond(
-                    "BasicApiResponse(ApiResponseMessages.FIELDS_BLANK, false)"
+                    HttpStatusCode.BadRequest,
+                    "Fields can't be blank"
                 )
                 return@post
             }
 
             if(userExist){
                 call.respond(
-                    "BasicApiResponse(ApiResponseMessages.USER_ALREADY_EXISTS, false)"
+                    HttpStatusCode.BadRequest,
+                    "Utilizatorul exista deja"
                 )
                 return@post
-            }else{
-                val userNameExist = loginService.getUserByUsername(request.username) != null
-                if(userNameExist){
-                    call.respond(
-                        "BasicApiResponse(ApiResponseMessages.USERNAME_EXISTS, false)"
-                    )
-                }
             }
 
-            loginService.createUser(
-                User(
+            loginService.createAccount(
+                CreateAccountRequest(
                     email = request.email,
-                    username = request.username,
-                    password = request.password,
-                    profileImageUrl = ""
+                    password = request.password
                 )
             )
             call.respond(
-                "BasicApiResponse(successful = true)"
+                HttpStatusCode.OK
             )
         }
     }
@@ -77,11 +69,17 @@ fun Route.loginUser(
         }
 
         if(request.email.isBlank() || request.password.isBlank()){
-            call.respond(HttpStatusCode.BadRequest)
+            call.respond(
+                HttpStatusCode.BadRequest,
+                "Fields can't be blank"
+            )
             return@post
         }
 
-        val isCorrectPassword = loginService.doesPasswordForUserMatch(request)
+        val isCorrectPassword = loginService.doesPasswordForUserMatch(
+            request.email,
+            request.password
+        )
 
         if(isCorrectPassword){
             val expiresIn = 1000L * 60L * 60L * 24L * 365L
@@ -95,13 +93,31 @@ fun Route.loginUser(
 
             call.respond(
                 HttpStatusCode.OK,
+                "Logat"
                 /*AuthResponse(token = token, successful = true)*/
             )
         }else{
-            call.respond(
-                HttpStatusCode.OK,
-                /*AuthResponse(successful = false)*/
+            val userExists = loginService.loginUser(
+                request.email,
+                request.password
             )
+
+            if(userExists){
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Credentiale incorecte"
+                    /*AuthResponse(successful = false)*/
+                )
+            }
+            else{
+                call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Utilizatorul nu exista"
+                    /*AuthResponse(successful = false)*/
+                )
+            }
+
+
         }
     }
 }

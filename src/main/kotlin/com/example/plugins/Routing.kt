@@ -1,7 +1,6 @@
 package com.example.plugins
 
-import com.example.domain.repository.TestRepository
-import com.example.domain.repository.WorkoutDayRepository
+import com.example.domain.repository.UsersRepository
 import com.example.domain.service.*
 import com.example.routes.*
 import io.ktor.routing.*
@@ -15,21 +14,24 @@ fun Application.configureRouting() {
     val repetitionService: RepetitionService by inject()
     val exampleService: ExampleService by inject()
     val exerciceService: ExerciceService by inject()
-    val testRepo : TestRepository by inject()
+    val testRepo : UsersRepository by inject()
 
     routing {
-        defaultRoute(testRepo)
         waterRoute(waterService)
         workoutRoute(workoutService, userService)
+
+
         loginUser(userService)
         createUserRoute(userService)
-        workoutDayRoute(
+
+
+/*        workoutDayRoute(
             userService,
             repetitionService,
             waterService,
             workoutService,
             exampleService,
             exerciceService
-        )
+        )*/
     }
 }

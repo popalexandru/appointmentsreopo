@@ -1,65 +1,14 @@
 package com.example.routes
 
 import com.example.data.requests.AddWaterReq
-import com.example.data.requests.CreateAccountRequest
-import com.example.domain.repository.TestRepository
-import com.example.domain.repository.WorkoutDayRepository
-import com.example.domain.repository.WorkoutRepository
 import com.example.domain.service.WaterService
 import com.example.util.isValid
 import com.example.util.userId
-import com.example.util.waterQty
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
-
-fun Route.defaultRoute(
-    repository: TestRepository
-){
-        get("user/get"){
-            val username = call.parameters["username"] ?: ""
-
-            val password = repository.getPassword(username)
-
-            if(password != null){
-                call.respond(
-                    HttpStatusCode.OK,
-                    "Parola gasita: $password"
-                )
-            }else{
-                call.respond(
-                    HttpStatusCode.NotFound,
-                    "Nu am gasit userul"
-                )
-            }
-        }
-
-        post("/user/create"){
-            val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run{
-                call.respond(HttpStatusCode.BadRequest)
-                return@post
-            }
-
-            if(request.email.isBlank() || request.username.isBlank() || request.password.isBlank())
-            {
-                call.respond(
-                    HttpStatusCode.BadRequest,
-                    "Campurile nu pot fii goale"
-                )
-
-                return@post
-            }
-
-            repository.createAccount(
-                request.username,
-                request.password,
-                request.email
-            )
-            call.respondText { "OKE" }
-        }
-}
 
 fun Route.waterRoute(
     waterService: WaterService

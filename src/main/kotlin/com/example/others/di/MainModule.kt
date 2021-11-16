@@ -16,7 +16,7 @@ val mainModule = module {
     }
 
     single{
-        TestRepository(get())
+        UsersRepository(get())
     }
 
     single{
@@ -41,10 +41,6 @@ val mainModule = module {
 
     single{
         WaterRepository(get())
-    }
-
-    single{
-        UserRepository(get())
     }
 
     single {

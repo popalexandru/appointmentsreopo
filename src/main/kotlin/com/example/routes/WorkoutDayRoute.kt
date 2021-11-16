@@ -12,6 +12,7 @@ import io.ktor.http.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
+/*
 fun Route.workoutDayRoute(
     userService: UserService,
     repetitionService: RepetitionService,
@@ -77,4 +78,4 @@ fun Route.workoutDayRoute(
         )
         return@get
     }
-}
+}*/
