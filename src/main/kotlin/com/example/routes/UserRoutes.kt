@@ -73,9 +73,6 @@ fun Route.loginUser(
             return@post
         }
 
-        call.respond(HttpStatusCode.BadGateway)
-        return@post
-
         if(request.email.isBlank() || request.password.isBlank()){
             call.respond(
                 HttpStatusCode.BadRequest,
@@ -102,7 +99,6 @@ fun Route.loginUser(
             call.respond(
                 HttpStatusCode.OK,
                 "Logat"
-                /*AuthResponse(token = token, successful = true)*/
             )
         }else{
             val userExists = loginService.getUserByEmail(request.email) != null
