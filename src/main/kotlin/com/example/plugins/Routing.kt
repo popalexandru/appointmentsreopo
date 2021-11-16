@@ -24,6 +24,8 @@ fun Application.configureRouting() {
         loginUser(userService)
         createUserRoute(userService)
 
+        testRoute()
+
 
 /*        workoutDayRoute(
             userService,
