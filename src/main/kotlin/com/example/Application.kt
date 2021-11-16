@@ -31,9 +31,9 @@ fun Application.module() {
         modules(mainModule)
     }
 
-    install(CORS){
-            anyHost()
-            header("key")
+    install(CORS) {
+        anyHost()
+        header("key")
         method(HttpMethod.Options)
         method(HttpMethod.Get)
         method(HttpMethod.Post)
