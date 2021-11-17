@@ -25,6 +25,7 @@ fun Application.configureRouting() {
         createUserRoute(userService)
         testRoute()
         makeReservation(usersRepository, reservationRepository)
+        authRoute()
 
 /*        workoutDayRoute(
             userService,
