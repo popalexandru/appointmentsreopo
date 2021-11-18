@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.example.data.models.User
 import com.example.data.requests.CreateAccountRequest
 import com.example.data.requests.LoginRequest
+import com.example.data.responses.AuthResponse
 import com.example.domain.service.UserService
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -98,7 +99,7 @@ fun Route.loginUser(
 
             call.respond(
                 HttpStatusCode.OK,
-                token
+                AuthResponse(token = token, successful = true)
             )
         }else{
             val userExists = loginService.getUserByEmail(request.email) != null
@@ -106,13 +107,13 @@ fun Route.loginUser(
             if(userExists){
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    "Parola incorecta"
+                    AuthResponse(successful = false, wrongPassword = true)
                 )
             }
             else{
                 call.respond(
                     HttpStatusCode.BadRequest,
-                    "Utilizatorul nu exista"
+                    AuthResponse(successful = false, userDoesntExist = true)
                 )
             }
         }

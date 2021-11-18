@@ -48,7 +48,6 @@ fun Application.module() {
         allowCredentials = true
     }
 
-
     configureSerialization()
     configureMonitoring()
     configureHTTP()
