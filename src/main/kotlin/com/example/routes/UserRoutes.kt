@@ -101,6 +101,7 @@ fun Route.loginUser(
                 HttpStatusCode.OK,
                 AuthResponse(token = token, successful = true)
             )
+            return@post
         }else{
             val userExists = loginService.getUserByEmail(request.email) != null
 
@@ -109,12 +110,14 @@ fun Route.loginUser(
                     HttpStatusCode.OK,
                     AuthResponse(successful = false, wrongPassword = true)
                 )
+                return@post
             }
             else{
                 call.respond(
                     HttpStatusCode.OK,
                     AuthResponse(successful = false, userDoesntExist = true)
                 )
+                return@post
             }
         }
     }
