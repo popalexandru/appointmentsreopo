@@ -106,13 +106,13 @@ fun Route.loginUser(
 
             if(userExists){
                 call.respond(
-                    HttpStatusCode.BadRequest,
+                    HttpStatusCode.OK,
                     AuthResponse(successful = false, wrongPassword = true)
                 )
             }
             else{
                 call.respond(
-                    HttpStatusCode.BadRequest,
+                    HttpStatusCode.OK,
                     AuthResponse(successful = false, userDoesntExist = true)
                 )
             }
