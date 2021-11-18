@@ -44,6 +44,7 @@ fun Application.module() {
         header(HttpHeaders.AccessControlAllowHeaders)
         header(HttpHeaders.ContentType)
         header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.Authorization)
         allowCredentials = true
     }
 
