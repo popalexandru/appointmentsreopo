@@ -54,6 +54,8 @@ fun Route.createUserRoute(
 
             val result = loginService.createAccount(
                 CreateAccountRequest(
+                    name = request.name,
+                    surname = request.surname,
                     email = request.email,
                     password = request.password
                 )
@@ -152,6 +154,7 @@ fun Route.getUser(
 
             user?.let {
 
+                println("User found !")
                 call.respond(
                     HttpStatusCode.OK,
                     user

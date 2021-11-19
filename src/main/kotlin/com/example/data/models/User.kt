@@ -6,6 +6,8 @@ import org.bson.types.ObjectId
 
 @Serializable
 data class User(
+    val name: String,
+    val surname: String,
     val email: String,
     val profileImageUrl : String,
     val password : String,
