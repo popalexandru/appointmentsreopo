@@ -26,6 +26,13 @@ class UserService(
         return userRepository.getUserByEmail(userEmail)
     }
 
+    suspend fun getUserById(
+        userId: String
+    ): User? {
+        return userRepository.getUserById(userId)
+    }
+
+
     suspend fun doesPasswordForUserMatch(
         userEmail: String,
         userPassword: String

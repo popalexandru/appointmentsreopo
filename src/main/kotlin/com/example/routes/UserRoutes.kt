@@ -6,7 +6,9 @@ import com.example.data.models.User
 import com.example.data.requests.CreateAccountRequest
 import com.example.data.requests.LoginRequest
 import com.example.data.responses.AuthResponse
+import com.example.data.responses.RegisterResponse
 import com.example.domain.service.UserService
+import com.example.util.userIdToken
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -30,16 +32,22 @@ fun Route.createUserRoute(
 
             if(request.email.isBlank() || request.password.isBlank()){
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    "Fields can't be blank"
+                    HttpStatusCode.OK,
+                    RegisterResponse(
+                        successful = false,
+                        fieldsAreBlank = true
+                    )
                 )
                 return@post
             }
 
             if(userExist){
                 call.respond(
-                    HttpStatusCode.BadRequest,
-                    "Utilizatorul exista deja"
+                    HttpStatusCode.OK,
+                    RegisterResponse(
+                        successful = true,
+                        userAlreadyExists = true
+                    )
                 )
                 return@post
             }
@@ -51,13 +59,16 @@ fun Route.createUserRoute(
                 )
             )
 
-            if(result.wasAcknowledged()){
+/*            if(result.wasAcknowledged()){
                 call.respondText { "Response not acknowledged" }
-            }else{
+            }else{*/
                 call.respond(
-                    HttpStatusCode.OK
+                    HttpStatusCode.OK,
+                    RegisterResponse(
+                        successful = true
+                    )
                 )
-            }
+            /*}*/
         }
     }
 }
@@ -82,6 +93,16 @@ fun Route.loginUser(
             return@post
         }
 
+        val user = loginService.getUserByEmail(request.email) ?: kotlin.run {
+            call.respond(
+                HttpStatusCode.OK,
+                AuthResponse(
+                    userDoesntExist = true
+                )
+            )
+            return@post
+        }
+
         val isCorrectPassword = loginService.doesPasswordForUserMatch(
             request.email,
             request.password
@@ -90,7 +111,7 @@ fun Route.loginUser(
         if(isCorrectPassword){
             val expiresIn = 1000L * 60L * 60L * 24L * 365L
             val token = JWT.create()
-                .withClaim("email", request.email)
+                .withClaim("userId", user.id)
                 .withIssuer(jwtIssuer)
                 .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
                 .withAudience(jwtAudience)
@@ -116,6 +137,32 @@ fun Route.loginUser(
                     AuthResponse(userDoesntExist = true)
                 )
             }
+        }
+    }
+}
+
+fun Route.getUser(
+    loginService: UserService
+){
+    authenticate {
+        get("api/get/user"){
+            val userId = call.userIdToken
+
+            val user = loginService.getUserById(userId)
+
+            user?.let {
+
+                call.respond(
+                    HttpStatusCode.OK,
+                    user
+                )
+                return@get
+            }
+
+            call.respond(
+                HttpStatusCode.NotFound
+            )
+            return@get
         }
     }
 }
