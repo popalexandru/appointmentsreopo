@@ -16,6 +16,10 @@ val mainModule = module {
     }
 
     single{
+        BusinessSnippetRepository(get())
+    }
+
+    single{
         ReservationRepository(get())
     }
 

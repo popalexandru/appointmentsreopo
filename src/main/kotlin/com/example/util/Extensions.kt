@@ -30,3 +30,16 @@ fun ApplicationCall.timestamp(): Long{
 
 val ApplicationCall.userIdToken: String
     get() = principal<JWTPrincipal>()?.getClaim("userId", String::class) ?: ""
+
+fun ApplicationCall.page(): Int{
+    val page = this.parameters[Constants.PARAM_PAGE]?.toIntOrNull() ?: 0
+    return page - 1
+}
+
+fun ApplicationCall.pageSize(): Int{
+    return this.parameters[Constants.PARAM_PAGE_SIZE]?.toIntOrNull() ?: 3
+}
+
+fun ApplicationCall.query(): String{
+    return this.parameters[Constants.PARAM_QUERY] ?: ""
+}
