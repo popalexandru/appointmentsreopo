@@ -14,7 +14,6 @@ class BusinessSnippetRepository(
         page: Int,
         pageSize: Int,
     ): List<BusinessSnippet>{
-        addDummyBusinessSnippet()
 
         return businessSnippets
             .find(BusinessSnippet::businessName regex Regex("(?i).*$query.*"))
