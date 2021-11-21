@@ -7,7 +7,8 @@ import org.bson.types.ObjectId
 @Serializable
 data class BusinessSnippet(
     @BsonId
-    val businessId: String = ObjectId().toString(),
+    val businessSnippetId: String = ObjectId().toString(),
+    val businessId: String,
     val businessName: String,
     val businessImgUrl: String,
     val rating: Float,

@@ -22,14 +22,14 @@ class BusinessSnippetRepository(
             .toList()
     }
 
-    suspend fun addDummyBusinessSnippet(){
+/*    suspend fun addDummyBusinessSnippet(){
         businessSnippets.insertOne(
             BusinessSnippet(
                 businessName = "Pop Alexandru Vasile PFA",
                 businessImgUrl = "",
                 rating = 5.0F,
-                categoriesList = emptyList()
+                categoriesList = emptyList(),
             )
         )
-    }
+    }*/
 }

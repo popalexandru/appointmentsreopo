@@ -1,5 +1,6 @@
 package com.example.others.di
 
+import com.example.appoint.data.models.Business
 import com.example.domain.repository.*
 import com.example.domain.service.*
 import com.example.others.constants.Constants
@@ -13,6 +14,10 @@ val mainModule = module {
     single {
         val client = KMongo.createClient("mongodb+srv://sutzu:alumil@cluster0.jjuyk.mongodb.net/"+Constants.DB_NAME+"?retryWrites=true&w=majority").coroutine
         client.getDatabase(Constants.DB_NAME)
+    }
+
+    single {
+        BusinessRepository(get())
     }
 
     single{

@@ -9,5 +9,6 @@ data class Reservation(
     @BsonId
     val reservationId: String = ObjectId().toString(),
     val userId: String,
+    val businessId: String,
     val timestamp: Long
 )

@@ -31,6 +31,9 @@ fun ApplicationCall.timestamp(): Long{
 val ApplicationCall.userIdToken: String
     get() = principal<JWTPrincipal>()?.getClaim("userId", String::class) ?: ""
 
+val ApplicationCall.businessId: String
+    get() = this.parameters[Constants.PARAM_BS_ID] ?: ""
+
 fun ApplicationCall.page(): Int{
     val page = this.parameters[Constants.PARAM_PAGE]?.toIntOrNull() ?: 0
     return page - 1

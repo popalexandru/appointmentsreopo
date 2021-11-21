@@ -4,6 +4,7 @@ import com.example.data.requests.LoginRequest
 import com.example.data.requests.ReservationRequest
 import com.example.domain.repository.ReservationRepository
 import com.example.domain.repository.UsersRepository
+import com.example.util.userIdToken
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -22,10 +23,12 @@ fun Route.makeReservation(
                 return@post
             }
 
-            val userExists = usersRepository.getUserById(request.userId) != null
+            val userId = call.userIdToken
+
+            val userExists = usersRepository.getUserById(userId) != null
 
             if(userExists){
-                reservationRepository.makeReservation(request.userId)
+                reservationRepository.makeReservation(userId, request.restaurantId)
                 call.respond(HttpStatusCode.OK)
                 return@post
             }else{

@@ -1,6 +1,8 @@
 package com.example.routes
 
+import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.BusinessSnippetRepository
+import com.example.util.businessId
 import com.example.util.page
 import com.example.util.pageSize
 import com.example.util.query
@@ -11,8 +13,30 @@ import io.ktor.response.*
 import io.ktor.routing.*
 
 fun Route.businessRoute(
-    repository: BusinessSnippetRepository
-){
+    repository: BusinessSnippetRepository,
+    businessRepository: BusinessRepository
+) {
+    authenticate {
+        get("api/business/get")
+        {
+            val businessId = call.businessId
+
+            val business = businessRepository.getBusinessById(businessId)
+
+            business?.let {
+                call.respond(
+                    HttpStatusCode.OK,
+                    business
+                )
+                return@get
+            }
+
+            call.respond(
+                HttpStatusCode.NotFound
+            )
+        }
+    }
+
     authenticate {
         get("api/business/snippets/get")
         {

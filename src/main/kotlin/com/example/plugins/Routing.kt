@@ -1,5 +1,6 @@
 package com.example.plugins
 
+import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.BusinessSnippetRepository
 import com.example.domain.repository.ReservationRepository
 import com.example.domain.repository.UsersRepository
@@ -18,6 +19,7 @@ fun Application.configureRouting() {
     val usersRepository: UsersRepository by inject()
     val reservationRepository: ReservationRepository by inject()
     val businessReservationRepository : BusinessSnippetRepository by inject()
+    val businessRepository : BusinessRepository by inject()
 
     routing {
         loginUser(
@@ -29,7 +31,7 @@ fun Application.configureRouting() {
         makeReservation(usersRepository, reservationRepository)
         authRoute()
         getUser(loginService = userService)
-        businessRoute(businessReservationRepository)
+        businessRoute(businessReservationRepository, businessRepository)
 
 /*        workoutDayRoute(
             userService,

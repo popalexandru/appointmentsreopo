@@ -9,11 +9,13 @@ class ReservationRepository(
     val reservations = db.getCollection<Reservation>()
 
     suspend fun makeReservation(
-        userId: String
+        userId: String,
+        businessId: String
     ){
         reservations.insertOne(
             Reservation(
                 userId = userId,
+                businessId = businessId,
                 timestamp = System.currentTimeMillis()
             )
         )
