@@ -4,6 +4,7 @@ import com.example.data.requests.LoginRequest
 import com.example.data.requests.ReservationRequest
 import com.example.domain.repository.ReservationRepository
 import com.example.domain.repository.UsersRepository
+import com.example.util.businessId
 import com.example.util.userIdToken
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -28,12 +29,53 @@ fun Route.makeReservation(
             val userExists = usersRepository.getUserById(userId) != null
 
             if(userExists){
-                reservationRepository.makeReservation(userId, request.restaurantId)
-                call.respond(HttpStatusCode.OK)
+                val insertResult = reservationRepository.makeReservation(userId, request.restaurantId)
+
+                if(insertResult.wasAcknowledged()){
+                    call.respond(HttpStatusCode.OK)
+                }else{
+                    call.respond(HttpStatusCode.NotFound)
+                }
+
                 return@post
             }else{
                 call.respond(HttpStatusCode.NotFound)
                 return@post
+            }
+        }
+    }
+}
+
+fun Route.getReservation(
+    usersRepository: UsersRepository,
+    reservationRepository: ReservationRepository
+){
+    authenticate {
+        get("api/reservation/get/byuser")
+        {
+            val userId = call.userIdToken
+
+            val user = usersRepository.getUserById(userId)
+
+            if(user != null)
+            {
+                val reservation = reservationRepository.getReservationByUserId(userId)
+
+                reservation?.let {
+                    call.respond(
+                        HttpStatusCode.OK,
+                        reservation
+                    )
+                    return@get
+                }
+
+                call.respond(HttpStatusCode.OK)
+                return@get
+            }else
+            {
+                call.respond(
+                    HttpStatusCode.NotFound
+                )
             }
         }
     }

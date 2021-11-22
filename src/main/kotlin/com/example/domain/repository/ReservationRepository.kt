@@ -1,7 +1,9 @@
 package com.example.domain.repository
 
 import com.example.data.models.Reservation
+import com.mongodb.client.result.InsertOneResult
 import org.litote.kmongo.coroutine.CoroutineDatabase
+import org.litote.kmongo.eq
 
 class ReservationRepository(
     db: CoroutineDatabase
@@ -11,13 +13,25 @@ class ReservationRepository(
     suspend fun makeReservation(
         userId: String,
         businessId: String
-    ){
-        reservations.insertOne(
+    ): InsertOneResult {
+        return reservations.insertOne(
             Reservation(
                 userId = userId,
                 businessId = businessId,
                 timestamp = System.currentTimeMillis()
             )
         )
+    }
+
+    suspend fun getReservationByUserId(
+        userId: String
+    ): Reservation? {
+        return reservations.findOne(Reservation::userId eq userId)
+    }
+
+    suspend fun getReservationsByBusinessId(
+        businessId: String
+    ) : List<Reservation> {
+        return reservations.find(Reservation::businessId eq businessId).toList()
     }
 }

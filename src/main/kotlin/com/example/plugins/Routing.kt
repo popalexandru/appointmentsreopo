@@ -33,6 +33,9 @@ fun Application.configureRouting() {
         getUser(loginService = userService)
         businessRoute(businessReservationRepository, businessRepository)
 
+        /* Reservation */
+        getReservation(usersRepository, reservationRepository)
+
 /*        workoutDayRoute(
             userService,
             repetitionService,
