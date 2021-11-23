@@ -2,8 +2,10 @@ package com.example.domain.repository
 
 import com.example.data.models.Reservation
 import com.mongodb.client.result.InsertOneResult
+import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
+import java.util.concurrent.TimeUnit
 
 class ReservationRepository(
     db: CoroutineDatabase
@@ -19,8 +21,9 @@ class ReservationRepository(
             Reservation(
                 userId = userId,
                 businessId = businessId,
-                timestamp = System.currentTimeMillis(),
-                businessName = businessName
+                timestampDone = System.currentTimeMillis(),
+                businessName = businessName,
+                timestampDue = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(2)
             )
         )
     }
@@ -29,6 +32,18 @@ class ReservationRepository(
         userId: String
     ): Reservation? {
         return reservations.findOne(Reservation::userId eq userId)
+    }
+
+    suspend fun getReservationByUserAndBusiness(
+        userId: String,
+        businessId: String
+    ): Reservation?{
+        return reservations.findOne(
+            and(
+              Reservation::userId eq userId,
+              Reservation::businessId eq businessId
+            )
+        )
     }
 
     suspend fun getReservationsByBusinessId(

@@ -11,5 +11,6 @@ data class Reservation(
     val userId: String,
     val businessId: String,
     val businessName: String,
-    val timestamp: Long
+    val timestampDone: Long,
+    val timestampDue: Long
 )

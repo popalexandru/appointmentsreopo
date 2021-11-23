@@ -31,7 +31,7 @@ fun Application.configureRouting() {
         makeReservation(usersRepository, reservationRepository, businessRepository)
         authRoute()
         getUser(loginService = userService)
-        businessRoute(businessReservationRepository, businessRepository)
+        businessRoute(businessReservationRepository, businessRepository, reservationRepository)
 
         /* Reservation */
         getReservation(usersRepository, reservationRepository)

@@ -2,10 +2,8 @@ package com.example.routes
 
 import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.BusinessSnippetRepository
-import com.example.util.businessId
-import com.example.util.page
-import com.example.util.pageSize
-import com.example.util.query
+import com.example.domain.repository.ReservationRepository
+import com.example.util.*
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -14,13 +12,21 @@ import io.ktor.routing.*
 
 fun Route.businessRoute(
     repository: BusinessSnippetRepository,
-    businessRepository: BusinessRepository
+    businessRepository: BusinessRepository,
+    reservationRepository: ReservationRepository
 ) {
     get("api/business/get")
     {
         val businessId = call.businessId
+        val userId = call.userIdToken
+
 
         val business = businessRepository.getBusinessById(businessId)
+        if (business != null) {
+            business.userReservation = reservationRepository.getReservationByUserAndBusiness(
+                userId, businessId
+            )
+        }
 
         business?.let {
             call.respond(

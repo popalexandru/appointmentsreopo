@@ -21,7 +21,8 @@ class BusinessRepository(
                 businessName = "Pop Alexandru Vasile PFA",
                 businessImgUrl = "https://www.replicahd.ro/wp-content/uploads/2020/05/salon-frizerie-coafura-infrumusetare.jpg",
                 rating = 5.0F,
-                categoriesList = emptyList()
+                categoriesList = emptyList(),
+                userReservation = null
             )
         )
     }
