@@ -5,12 +5,12 @@ import org.bson.codecs.pojo.annotations.BsonId
 import org.bson.types.ObjectId
 
 @Serializable
-data class User(
-    var name: String,
-    var surname: String,
+data class UserWithReservation(
+    val name: String,
+    val surname: String,
     val email: String,
     val profileImageUrl : String,
-    val password : String,
+    var reservation: Reservation?,
     @BsonId
     val id : String = ObjectId().toString()
 )

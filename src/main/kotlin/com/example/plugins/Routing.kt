@@ -35,6 +35,7 @@ fun Application.configureRouting() {
 
         /* Reservation */
         getReservation(usersRepository, reservationRepository)
+        getUserWithReservation(userService, reservationRepository)
 
 /*        workoutDayRoute(
             userService,

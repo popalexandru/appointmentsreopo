@@ -3,10 +3,12 @@ package com.example.routes
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.example.data.models.User
+import com.example.data.models.UserWithReservation
 import com.example.data.requests.CreateAccountRequest
 import com.example.data.requests.LoginRequest
 import com.example.data.responses.AuthResponse
 import com.example.data.responses.RegisterResponse
+import com.example.domain.repository.ReservationRepository
 import com.example.domain.service.UserService
 import com.example.util.userIdToken
 import io.ktor.application.*
@@ -176,4 +178,45 @@ fun Route.authenticate(){
             call.respond(HttpStatusCode.OK)
         }
     }
+}
+
+fun Route.getUserWithReservation(
+    userService: UserService,
+    reservationRepository: ReservationRepository
+){
+    authenticate {
+        get("api/get/user/withr")
+        {
+            val user = userService.getUserById(call.userIdToken)
+
+            user?.let {
+                val userWithReservation = userToUserR(it)
+
+                val userReservation = reservationRepository.getReservationByUserId(call.userIdToken)
+
+                userReservation?.let {
+                    /* add the reservation if exists */
+                    userWithReservation.reservation = it
+                }
+
+                call.respond(
+                    HttpStatusCode.OK,
+                    userWithReservation
+                )
+            }
+
+            /* user doesnt exist */
+            call.respond(HttpStatusCode.NotFound)
+        }
+    }
+}
+
+private fun userToUserR(user: User) : UserWithReservation {
+    return UserWithReservation(
+        user.name,
+        user.surname,
+        user.email,
+        user.profileImageUrl,
+        null
+    )
 }
