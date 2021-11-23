@@ -10,5 +10,6 @@ data class Reservation(
     val reservationId: String = ObjectId().toString(),
     val userId: String,
     val businessId: String,
+    val businessName: String,
     val timestamp: Long
 )

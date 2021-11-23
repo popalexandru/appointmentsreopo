@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.data.requests.LoginRequest
 import com.example.data.requests.ReservationRequest
+import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.ReservationRepository
 import com.example.domain.repository.UsersRepository
 import com.example.util.businessId
@@ -15,7 +16,8 @@ import io.ktor.routing.*
 
 fun Route.makeReservation(
     usersRepository: UsersRepository,
-    reservationRepository: ReservationRepository
+    reservationRepository: ReservationRepository,
+    businessRepository: BusinessRepository
 ){
     authenticate {
         post("api/reservation/make"){
@@ -29,14 +31,20 @@ fun Route.makeReservation(
             val userExists = usersRepository.getUserById(userId) != null
 
             if(userExists){
-                val insertResult = reservationRepository.makeReservation(userId, request.restaurantId)
+                val business = businessRepository.getBusinessById(request.restaurantId)
 
-                if(insertResult.wasAcknowledged()){
-                    call.respond(HttpStatusCode.OK)
-                }else{
-                    call.respond(HttpStatusCode.NotFound)
+                business?.let {
+                    val insertResult = reservationRepository.makeReservation(userId, request.restaurantId, it.businessName)
+
+                    if(insertResult.wasAcknowledged()){
+                        call.respond(HttpStatusCode.OK)
+                    }else{
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                    return@post
                 }
 
+                call.respond(HttpStatusCode.NotFound)
                 return@post
             }else{
                 call.respond(HttpStatusCode.NotFound)

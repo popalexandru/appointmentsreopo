@@ -12,13 +12,15 @@ class ReservationRepository(
 
     suspend fun makeReservation(
         userId: String,
-        businessId: String
+        businessId: String,
+        businessName: String
     ): InsertOneResult {
         return reservations.insertOne(
             Reservation(
                 userId = userId,
                 businessId = businessId,
-                timestamp = System.currentTimeMillis()
+                timestamp = System.currentTimeMillis(),
+                businessName = businessName
             )
         )
     }
