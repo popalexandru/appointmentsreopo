@@ -16,42 +16,40 @@ fun Route.businessRoute(
     repository: BusinessSnippetRepository,
     businessRepository: BusinessRepository
 ) {
-    authenticate {
-        get("api/business/get")
-        {
-            val businessId = call.businessId
+    get("api/business/get")
+    {
+        val businessId = call.businessId
 
-            val business = businessRepository.getBusinessById(businessId)
+        val business = businessRepository.getBusinessById(businessId)
 
-            business?.let {
-                call.respond(
-                    HttpStatusCode.OK,
-                    business
-                )
-                return@get
-            }
-
-            call.respond(
-                HttpStatusCode.NotFound
-            )
-        }
-    }
-
-    authenticate {
-        get("api/business/snippets/get")
-        {
-            val query = call.query()
-            val page = call.page()
-            val pageSize = call.pageSize()
-
-            val businessSnippetsList = repository.getBusinessSnippets(
-                query, page, pageSize
-            )
-
+        business?.let {
             call.respond(
                 HttpStatusCode.OK,
-                businessSnippetsList
+                business
             )
+            return@get
         }
+
+        call.respond(
+            HttpStatusCode.NotFound
+        )
     }
+
+
+    get("api/business/snippets/get")
+    {
+        val query = call.query()
+        val page = call.page()
+        val pageSize = call.pageSize()
+
+        val businessSnippetsList = repository.getBusinessSnippets(
+            query, page, pageSize
+        )
+
+        call.respond(
+            HttpStatusCode.OK,
+            businessSnippetsList
+        )
+    }
+
 }
