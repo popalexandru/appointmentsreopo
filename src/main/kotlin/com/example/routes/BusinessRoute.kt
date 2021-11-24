@@ -15,32 +15,32 @@ fun Route.businessRoute(
     businessRepository: BusinessRepository,
     reservationRepository: ReservationRepository
 ) {
-    get("api/business/get")
-    {
-        val businessId = call.businessId
-        val userId = call.userIdToken
-
-
-        val business = businessRepository.getBusinessById(businessId)
-        if (business != null) {
-            business.userReservation = reservationRepository.getReservationByUserAndBusiness(
+    authenticate {
+        get("api/business/get")
+        {
+            val businessId = call.businessId
+            val userId = call.userIdToken
+            val reservation = reservationRepository.getReservationByUserAndBusiness(
                 userId, businessId
             )
-        }
+            val business = businessRepository.getBusinessById(businessId)
+            if (business != null) {
+                business.userReservation = reservation
+            }
 
-        business?.let {
+            business?.let {
+                call.respond(
+                    HttpStatusCode.OK,
+                    business
+                )
+                return@get
+            }
+
             call.respond(
-                HttpStatusCode.OK,
-                business
+                HttpStatusCode.NotFound
             )
-            return@get
         }
-
-        call.respond(
-            HttpStatusCode.NotFound
-        )
     }
-
 
     get("api/business/snippets/get")
     {
