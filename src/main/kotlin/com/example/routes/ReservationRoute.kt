@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.data.requests.LoginRequest
+import com.example.data.requests.ReservationCancelRequest
 import com.example.data.requests.ReservationRequest
 import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.ReservationRepository
@@ -13,6 +14,29 @@ import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
+
+fun Route.deleteReservation(
+    reservationRepository: ReservationRepository
+){
+    authenticate {
+        post("api/reservation/delete"){
+            val request = call.receiveOrNull<ReservationCancelRequest>() ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+
+            val ack = reservationRepository.cancelReservation(request.reservationId)
+
+            if(ack.wasAcknowledged()){
+                call.respond(HttpStatusCode.OK)
+                return@post
+            }else{
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+        }
+    }
+}
 
 fun Route.makeReservation(
     usersRepository: UsersRepository,

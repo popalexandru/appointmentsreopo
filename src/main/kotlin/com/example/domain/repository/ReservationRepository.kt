@@ -1,6 +1,7 @@
 package com.example.domain.repository
 
 import com.example.data.models.Reservation
+import com.mongodb.client.result.DeleteResult
 import com.mongodb.client.result.InsertOneResult
 import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
@@ -26,6 +27,12 @@ class ReservationRepository(
                 timestampDue = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(2)
             )
         )
+    }
+
+    suspend fun cancelReservation(
+        reservationId: String
+    ): DeleteResult {
+        return reservations.deleteOne(Reservation::reservationId eq reservationId)
     }
 
     suspend fun getReservationByUserId(
