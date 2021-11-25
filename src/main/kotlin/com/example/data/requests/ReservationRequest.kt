@@ -4,5 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ReservationRequest(
-    val restaurantId: String
+    val restaurantId: String,
+    val timestamp: Long
 )

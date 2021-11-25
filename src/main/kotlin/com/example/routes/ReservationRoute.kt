@@ -65,7 +65,7 @@ fun Route.makeReservation(
                         return@post
                     }
 
-                    val insertResult = reservationRepository.makeReservation(userId, request.restaurantId, it.businessName)
+                    val insertResult = reservationRepository.makeReservation(userId, request.restaurantId, it.businessName, request.timestamp)
 
                     if(insertResult.wasAcknowledged()){
                         call.respond(HttpStatusCode.OK)

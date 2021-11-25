@@ -16,7 +16,8 @@ class ReservationRepository(
     suspend fun makeReservation(
         userId: String,
         businessId: String,
-        businessName: String
+        businessName: String,
+        timestamp: Long
     ): InsertOneResult {
         return reservations.insertOne(
             Reservation(
@@ -24,7 +25,7 @@ class ReservationRepository(
                 businessId = businessId,
                 timestampDone = System.currentTimeMillis(),
                 businessName = businessName,
-                timestampDue = System.currentTimeMillis() + TimeUnit.DAYS.toMillis(2)
+                timestampDue = timestamp
             )
         )
     }
