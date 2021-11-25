@@ -34,6 +34,13 @@ fun Route.makeReservation(
                 val business = businessRepository.getBusinessById(request.restaurantId)
 
                 business?.let {
+                    val userReservation = reservationRepository.getReservationByUserId(userId)
+
+                    userReservation?.let {
+                        call.respond(HttpStatusCode.NotFound)
+                        return@post
+                    }
+
                     val insertResult = reservationRepository.makeReservation(userId, request.restaurantId, it.businessName)
 
                     if(insertResult.wasAcknowledged()){
