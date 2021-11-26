@@ -20,6 +20,10 @@ val mainModule = module {
         BusinessRepository(get())
     }
 
+    single {
+        ServiceRepository(get())
+    }
+
     single{
         BusinessSnippetRepository(get())
     }

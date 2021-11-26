@@ -1,9 +1,6 @@
 package com.example.plugins
 
-import com.example.domain.repository.BusinessRepository
-import com.example.domain.repository.BusinessSnippetRepository
-import com.example.domain.repository.ReservationRepository
-import com.example.domain.repository.UsersRepository
+import com.example.domain.repository.*
 import com.example.domain.service.*
 import com.example.routes.*
 import io.ktor.routing.*
@@ -20,6 +17,7 @@ fun Application.configureRouting() {
     val reservationRepository: ReservationRepository by inject()
     val businessReservationRepository : BusinessSnippetRepository by inject()
     val businessRepository : BusinessRepository by inject()
+    val servicesRepository : ServiceRepository by inject()
 
     routing {
         loginUser(
@@ -31,7 +29,7 @@ fun Application.configureRouting() {
         makeReservation(usersRepository, reservationRepository, businessRepository)
         authRoute()
         getUser(loginService = userService)
-        businessRoute(businessReservationRepository, businessRepository, reservationRepository)
+        businessRoute(businessReservationRepository, businessRepository, reservationRepository, servicesRepository)
 
         /* Reservation */
         getReservation(usersRepository, reservationRepository)

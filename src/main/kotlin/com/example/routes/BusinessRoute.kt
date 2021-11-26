@@ -3,6 +3,7 @@ package com.example.routes
 import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.BusinessSnippetRepository
 import com.example.domain.repository.ReservationRepository
+import com.example.domain.repository.ServiceRepository
 import com.example.util.*
 import io.ktor.application.*
 import io.ktor.auth.*
@@ -13,7 +14,8 @@ import io.ktor.routing.*
 fun Route.businessRoute(
     repository: BusinessSnippetRepository,
     businessRepository: BusinessRepository,
-    reservationRepository: ReservationRepository
+    reservationRepository: ReservationRepository,
+    serviceRepository: ServiceRepository
 ) {
     authenticate {
         get("api/business/get")
@@ -29,6 +31,8 @@ fun Route.businessRoute(
             }
 
             business?.let {
+                serviceRepository.addDummyBusiness(it.businessId)
+
                 call.respond(
                     HttpStatusCode.OK,
                     business
