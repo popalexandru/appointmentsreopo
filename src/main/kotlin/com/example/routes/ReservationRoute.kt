@@ -120,3 +120,16 @@ fun Route.getReservation(
         }
     }
 }
+
+fun Route.getReservationByBandU(
+    reservationRepository: ReservationRepository,
+    usersRepository: UsersRepository
+){
+    authenticate {
+        get("api/reservation/get/byservice/bybusiness"){
+            val reservations = reservationRepository.getReservationsByBusinessId(call.businessId)
+
+            call.respond(HttpStatusCode.OK, reservations)
+        }
+    }
+}

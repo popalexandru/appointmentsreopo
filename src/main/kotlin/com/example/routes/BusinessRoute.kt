@@ -23,14 +23,20 @@ fun Route.businessRoute(
             val businessId = call.businessId
             val userId = call.userIdToken
 
-            val reservation = reservationRepository.getReservationByUserAndBusiness(
+/*            val reservation = reservationRepository.getReservationByUserAndBusiness(
                 userId, businessId
-            )
+            )*/
+            val allReservations = reservationRepository.getReservationsByBusinessId(businessId)
+            allReservations.forEach {
+                if(it.userId == userId)
+                    it.userId = "-1"
+            }
+
             val servicesList = serviceRepository.getServicesByBusiness(businessId)
 
             val business = businessRepository.getBusinessById(businessId)
             if (business != null) {
-                business.userReservation = reservation
+                business.allReservations = allReservations
 
                 servicesList.isNotEmpty().let {
                     business.servicesList = servicesList

@@ -10,4 +10,5 @@ object Constants {
     val PARAM_PAGE: String = "page"
     val PARAM_PAGE_SIZE: String = "pageSize"
     val PARAM_QUERY: String = "query"
+    val PARAM_SR_ID: String = "serviceId"
 }

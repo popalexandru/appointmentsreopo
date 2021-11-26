@@ -34,6 +34,9 @@ val ApplicationCall.userIdToken: String
 val ApplicationCall.businessId: String
     get() = this.parameters[Constants.PARAM_BS_ID] ?: ""
 
+val ApplicationCall.serviceId: String
+    get() = this.parameters[Constants.PARAM_SR_ID] ?: ""
+
 fun ApplicationCall.page(): Int{
     val page = this.parameters[Constants.PARAM_PAGE]?.toIntOrNull() ?: 0
     return page - 1

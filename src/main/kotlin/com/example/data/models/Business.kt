@@ -14,6 +14,6 @@ data class Business(
     val businessImgUrl: String,
     val rating: Float,
     val categoriesList: List<String>,
-    var userReservation: Reservation?,
+    var allReservations: List<Reservation>,
     var servicesList: List<Service>?
 )
