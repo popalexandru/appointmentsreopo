@@ -18,7 +18,7 @@ class ReservationRepository(
         businessId: String,
         businessName: String,
         timestamp: Long,
-        serviceId: String = "123"
+        serviceId: String
     ): InsertOneResult {
         return reservations.insertOne(
             Reservation(

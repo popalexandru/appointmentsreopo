@@ -11,11 +11,10 @@ class BusinessRepository(
     suspend fun getBusinessById(
         businessId: String
     ): Business? {
-        //addDummyBusiness()
         return business.findOneById(businessId)
     }
 
-    private suspend fun addDummyBusiness(){
+/*    private suspend fun addDummyBusiness(){
         business.insertOne(
             Business(
                 businessName = "Pop Alexandru Vasile PFA",
@@ -25,5 +24,5 @@ class BusinessRepository(
                 userReservation = null
             )
         )
-    }
+    }*/
 }

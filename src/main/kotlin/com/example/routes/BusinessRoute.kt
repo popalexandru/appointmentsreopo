@@ -22,17 +22,22 @@ fun Route.businessRoute(
         {
             val businessId = call.businessId
             val userId = call.userIdToken
+
             val reservation = reservationRepository.getReservationByUserAndBusiness(
                 userId, businessId
             )
+            val servicesList = serviceRepository.getServicesByBusiness(businessId)
+
             val business = businessRepository.getBusinessById(businessId)
             if (business != null) {
                 business.userReservation = reservation
+
+                servicesList.isNotEmpty().let {
+                    business.servicesList = servicesList
+                }
             }
 
             business?.let {
-                serviceRepository.addDummyBusiness(it.businessId)
-
                 call.respond(
                     HttpStatusCode.OK,
                     business
