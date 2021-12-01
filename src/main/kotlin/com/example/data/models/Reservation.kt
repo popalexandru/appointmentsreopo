@@ -14,4 +14,16 @@ data class Reservation(
     val businessName: String,
     val timestampDone: Long,
     val timestampDue: Long
-)
+){
+    fun toReservationWithService(service: Service): ReservationWithService{
+        return ReservationWithService(
+            userId = this.userId,
+            businessId = this.businessId,
+            serviceId = this.serviceId,
+            businessName = this.businessName,
+            timestampDue = this.timestampDone,
+            timestampDone = this.timestampDone,
+            service = service
+        )
+    }
+}

@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.data.models.ReservationWithService
 import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.BusinessSnippetRepository
 import com.example.domain.repository.ReservationRepository
@@ -36,7 +37,19 @@ fun Route.businessRoute(
 
             val business = businessRepository.getBusinessById(businessId)
             if (business != null) {
-                business.allReservations = allReservations
+                /*business.allReservations = allReservations*/
+                val reservations = allReservations
+                val reservationsWithServices = mutableListOf<ReservationWithService>()
+
+                reservations.forEach { reservation ->
+                    val service = serviceRepository.getServiceById(reservation.serviceId)
+                    service?.let {
+                        val reservationWithService = reservation.toReservationWithService(service)
+                        reservationsWithServices.add(reservationWithService)
+
+                        business.allReservations = reservationsWithServices
+                    }
+                }
 
                 servicesList.isNotEmpty().let {
                     business.servicesList = servicesList
