@@ -21,7 +21,7 @@ data class Reservation(
             businessId = this.businessId,
             serviceId = this.serviceId,
             businessName = this.businessName,
-            timestampDue = this.timestampDone,
+            timestampDue = this.timestampDue,
             timestampDone = this.timestampDone,
             service = service
         )
