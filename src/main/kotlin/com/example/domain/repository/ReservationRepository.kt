@@ -61,4 +61,10 @@ class ReservationRepository(
     ) : List<Reservation> {
         return reservations.find(Reservation::businessId eq businessId).toList()
     }
+
+    suspend fun getReservationsByUserId(
+        userId: String
+    ): List<Reservation>{
+        return reservations.find(Reservation::userId eq userId).toList()
+    }
 }

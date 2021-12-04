@@ -32,7 +32,7 @@ fun Application.configureRouting() {
         businessRoute(businessReservationRepository, businessRepository, reservationRepository, servicesRepository)
 
         /* Reservation */
-        getReservation(usersRepository, reservationRepository)
+        getReservation(usersRepository, reservationRepository, servicesRepository)
         getUserWithReservation(userService, reservationRepository)
         deleteReservation(reservationRepository)
 

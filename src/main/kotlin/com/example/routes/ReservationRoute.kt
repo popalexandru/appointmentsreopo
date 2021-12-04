@@ -1,10 +1,12 @@
 package com.example.routes
 
+import com.example.data.models.ReservationWithService
 import com.example.data.requests.LoginRequest
 import com.example.data.requests.ReservationCancelRequest
 import com.example.data.requests.ReservationRequest
 import com.example.domain.repository.BusinessRepository
 import com.example.domain.repository.ReservationRepository
+import com.example.domain.repository.ServiceRepository
 import com.example.domain.repository.UsersRepository
 import com.example.util.businessId
 import com.example.util.userIdToken
@@ -88,7 +90,8 @@ fun Route.makeReservation(
 
 fun Route.getReservation(
     usersRepository: UsersRepository,
-    reservationRepository: ReservationRepository
+    reservationRepository: ReservationRepository,
+    serviceRepository: ServiceRepository
 ){
     authenticate {
         get("api/reservation/get/byuser")
@@ -99,17 +102,24 @@ fun Route.getReservation(
 
             if(user != null)
             {
-                val reservation = reservationRepository.getReservationByUserId(userId)
 
-                reservation?.let {
-                    call.respond(
-                        HttpStatusCode.OK,
-                        reservation
-                    )
-                    return@get
+                val reservationsWithServices = mutableListOf<ReservationWithService>()
+
+                val reservations = reservationRepository.getReservationsByUserId(userId)
+                reservations.forEach { reservation ->
+                    val service = serviceRepository.getServiceById(reservation.serviceId)
+
+                    service?.let {
+                        val reservWithServ = reservation.toReservationWithService(it)
+                        reservationsWithServices.add(reservWithServ)
+                    }
                 }
 
-                call.respond(HttpStatusCode.OK)
+                call.respond(
+                    HttpStatusCode.OK,
+                    reservationsWithServices
+                )
+
                 return@get
             }else
             {
